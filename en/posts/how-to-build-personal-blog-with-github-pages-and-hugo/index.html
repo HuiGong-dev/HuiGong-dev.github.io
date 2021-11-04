@@ -41,7 +41,7 @@ Coding and more
 <p>Hugo is a static site generator written in <a href=https://golang.org/>Go</a>.</p>
 <h2 id=why-hugo>Why Hugo</h2>
 <p>It&rsquo;s blazing fast! Hugo&rsquo;s official website states it is &ldquo;the world’s fastest framework for building websites&rdquo; and after using it I&rsquo;ve nothing to complain about the speed.</p>
-<p>Besides, build a blog with Hugo is simple and easy. Here is how:</p>
+<p>Besides, building a blog with Hugo is simple and easy. Here is how:</p>
 <h2 id=step-by-step>Step by step</h2>
 <h3 id=set-up-github-pages>Set up GitHub Pages</h3>
 <p>Head over to <a href=https://github.com/>GitHub</a>, login and create a new public repository named <code>username.github.io</code>. Be sure the <code>username</code> is exactly the same as your GitHub username. For example: my username is <code>HuiGong-dev</code> so my repository should be named as <code>HuiGong-dev.github.io</code>. Check the official guide <a href=(https://pages.github.com/)>here</a> if you met any problem.</p>
@@ -58,7 +58,15 @@ Coding and more
 /Users/huigong/projects
 </code></pre></div><p>and the output shows your working directory.</p>
 <h3 id=choose-a-theme>Choose a theme</h3>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-Shell data-lang=Shell>cd your-site-name
+git init
+git submodule add https://github.com/spf13/hyde.git
+</code></pre></div><p>There&rsquo;re around 300 themes for Hugo. I chose <a href=https://github.com/spf13/hyde>hyde</a> for my blog. You can find a theme that fits you best <a href=https://themes.gohugo.io/>here</a>. If none of them is the perfect theme for you, you may consider create your own theme in the future and contribute to the Hugo community :)</p>
+<p>Don&rsquo;t forget to configure the theme in <code>config.toml</code>. Simply add a line <code>theme = \"hyde\"</code> in the file. Replace <code>hyde</code> to the name of your own theme if you picked another theme.</p>
 <h3 id=build-your-site-and-push-to-github>Build your site and push to GitHub</h3>
+<p>Creating content in Hugo is simple:</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-Shell data-lang=Shell>hugo new posts/hello-world.md
+</code></pre></div><p>this will create a new Markdown file named <code>Hello world</code> in the content/posts directory. Open the file with your favorite editor (shout out for VS Code) and change the <code>draft: true</code> to <code>draft: false</code></p>
 <h3 id=create-a-blog-source-repository-in-github>Create a blog source repository in GitHub</h3>
 <h3 id=push-source-code-to-github>Push source code to GitHub</h3>
 <h3 id=automate-the-deploy-using-github-action>Automate the deploy using GitHub Action</h3>
