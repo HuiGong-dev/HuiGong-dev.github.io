@@ -66,7 +66,17 @@ git submodule add https://github.com/spf13/hyde.git
 <h3 id=build-your-site-and-push-to-github>Build your site and push to GitHub</h3>
 <p>Creating content in Hugo is simple:</p>
 <div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-Shell data-lang=Shell>hugo new posts/hello-world.md
-</code></pre></div><p>this will create a new Markdown file named <code>Hello world</code> in the content/posts directory. Open the file with your favorite editor (shout out to <a href=https://code.visualstudio.com/>VS Code</a>) and change the <code>draft: true</code> to <code>draft: false</code></p>
+</code></pre></div><p>this will create a new Markdown file named <code>Hello world</code> in the content/posts directory. Open the file with your favorite editor (shout out to <a href=https://code.visualstudio.com/>VS Code</a>) and change the <code>draft: true</code> to <code>draft: false</code>.</p>
+<p>Now, start the Hugo server to preview your site:</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-Shell data-lang=Shell>hugo server -D
+</code></pre></div><p>You can then check your new site at http://localhost:1313/.</p>
+<p>Next step is to configure the <code>config.toml</code> file. Open it with your favorite editor and set <code>baseURL</code> to <code>https://username.github.io/</code>. Remember to replace <code>username</code> to your own username on GitHub. The code below shows how it looks like by my side.</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-Toml data-lang=Toml><span style=color:#a6e22e>theme</span> = <span style=color:#e6db74>&#34;hyde&#34;</span>
+<span style=color:#a6e22e>baseURL</span> = <span style=color:#e6db74>&#39;https://huigong-dev.github.io/&#39;</span>
+<span style=color:#a6e22e>languageCode</span> = <span style=color:#e6db74>&#39;en-us&#39;</span>
+</code></pre></div><p>Great! You&rsquo;re all set! Finally it&rsquo;s time to build your site:</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-Shell data-lang=Shell>hugo -D
+</code></pre></div><p>code of your site will be generated under <code>./public/</code>. Change directory to <code>public/</code>, do <code>git init</code> and set remote to your GitHub pages repository. Push to your GitHub pages repository and your site should be live within seconds.</p>
 <h3 id=create-a-blog-source-repository-in-github>Create a blog source repository in GitHub</h3>
 <h3 id=push-source-code-to-github>Push source code to GitHub</h3>
 <h3 id=automate-the-deploy-using-github-action>Automate the deploy using GitHub Action</h3>
