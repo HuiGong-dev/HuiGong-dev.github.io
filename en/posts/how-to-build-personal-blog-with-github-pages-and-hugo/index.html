@@ -78,8 +78,52 @@ git submodule add https://github.com/spf13/hyde.git
 <div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-Shell data-lang=Shell>hugo -D
 </code></pre></div><p>code of your site will be generated under <code>./public/</code>. Change directory to <code>public/</code>, do <code>git init</code> and set remote to your GitHub pages repository. Push to your GitHub pages repository and your site should be live within seconds.</p>
 <h3 id=create-a-blog-source-repository-in-github>Create a blog source repository in GitHub</h3>
-<h3 id=push-source-code-to-github>Push source code to GitHub</h3>
-<h3 id=automate-the-deploy-using-github-action>Automate the deploy using GitHub Action</h3>
+<p>Okay, now your site is live, what&rsquo;s next? A problem used to bother me a lot was: how can I update my blog on multiple computers? Say, I have wrote something for my blog on my PC at home and now I&rsquo;m on the way with a laptop. How can I continue my work? Well the answer is: create a GitHub repository just for your source code. I said &ldquo;just&rdquo; because the <code>public/</code> directory is within the source code directory and we need to ignore <code>public/</code> and push the rest of them to github. Another benefit is that you can use GitHub Actions to glue your source code and blog together, which means you don&rsquo;t need to build and deploy your site every time you changed anything in your site, GitHub Actions will do all the boring stuff for you. Sounds nice? Here is how:</p>
+<p>Head over to GitHub and create a new repository with name like <code>blog_source</code> or anything that reminds you it&rsquo;s the source of your blog. Set it as remote repository for your source code and add <code>public/</code> to <code>.gitignore</code>.</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-Shell data-lang=Shell>touch .gitignore
+echo <span style=color:#e6db74>&#34;public/&#34;</span> &gt;&gt; .gitignore
+</code></pre></div><p>push it to GitHub and next time you want to edit your blog on another machine you just need to pull it from GitHub and continue the work.</p>
+<h3 id=automate-the-deploy-using-github-actions>Automate the deploy using GitHub Actions</h3>
+<p>This is one of the exciting part building a blog with GitHub Pages. Before building this blog I knew almost nothing about GitHub Actions but after using it, it was amazing! Automating the boring stuff always makes me hyped!</p>
+<p>Fist step is to create a GitHub personal access token. Follow the official documents <a href=https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token>here</a> for more information.</p>
+<p>Next, Head over to your <code>blog_source</code> repository on GitHub and click <code>Settings -> Secrets -> new repository secret</code>. Paste the token you just got, set the name to <code>ACTIONS_DEPLOY_KEY</code> and hit the <code>Add secret</code> button.</p>
+<p>Add the file <code>.github/workflows/pages.yml</code> below to your source code repository. The <code>external_repository</code> points to your blog repository.</p>
+<pre tabindex=0><code class=language-Yml data-lang=Yml>name: hugo publish
+
+on:
+  push:
+    branches:
+    - main
+
+jobs:
+  build-deploy:
+    runs-on: macos-latest
+    steps:
+    - name: Git checkout
+      uses: actions/checkout@v2
+    
+    - name: Update theme
+      run: git submodule update --init --recursive
+
+    - name: Setup Hugo
+      uses: peaceiris/actions-hugo@v2
+      with:
+        hugo-version: '0.88.1'
+
+    - name: Build
+      run: hugo  --minify
+
+    - name: Deploy
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        personal_token: ${{ secrets.ACTIONS_DEPLOY_KEY }}
+        external_repository: your-github-name/your-github-name.github.io
+        publish_branch: main
+        publish_dir: ./public
+        user_name: your-name
+        user_email: your-email
+</code></pre><p>And we are done! GitHub Actions will do all the boring &ldquo;build and deploy&rdquo; routine and you can concentrate on content creating and more.</p>
+<p>Happy blogging!</p>
 </div>
 </main>
 <script type=application/javascript>var doNotTrack=!1;doNotTrack||(function(a,e,f,g,b,c,d){a.GoogleAnalyticsObject=b,a[b]=a[b]||function(){(a[b].q=a[b].q||[]).push(arguments)},a[b].l=1*new Date,c=e.createElement(f),d=e.getElementsByTagName(f)[0],c.async=1,c.src=g,d.parentNode.insertBefore(c,d)}(window,document,'script','https://www.google-analytics.com/analytics.js','ga'),ga('create','UA-212132284-1','auto'),ga('send','pageview'))</script>
