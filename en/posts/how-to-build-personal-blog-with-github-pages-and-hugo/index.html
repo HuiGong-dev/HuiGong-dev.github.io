@@ -36,7 +36,7 @@ Coding and more
 <div class=post>
 <h1>How to build personal blog using GitHub Pages and Hugo</h1>
 <time datetime=2021-11-02T11:00:32+0100 class=post-date>Tue, Nov 2, 2021</time>
-<p>You want to build a personal blog but don&rsquo;t want to spend too much time building everything from scratch? Me too! After some research I get to know there&rsquo;re several static site generator out there and the most used generators are: <a href=https://jekyllrb.com/>Jekyll</a>, <a href=https://hexo.io/>Hexo</a> and <a href=https://gohugo.io/>Hugo</a>. All of them can work perfectly with <a href=https://pages.github.com/>GitHub Pages</a>. I chose Hugo as my site generator and it worked perfectly.</p>
+<p>You want to build a personal blog but don&rsquo;t want to spend too much time building everything from scratch? Me too! After some research I got to know there are several static site generators out there and the most used generators are: <a href=https://jekyllrb.com/>Jekyll</a>, <a href=https://hexo.io/>Hexo</a> and <a href=https://gohugo.io/>Hugo</a>. All of them can work perfectly with <a href=https://pages.github.com/>GitHub Pages</a>. I chose Hugo as my site generator and it worked perfectly.</p>
 <h2 id=what-is-hugo>What is Hugo</h2>
 <p>Hugo is a static site generator written in <a href=https://golang.org/>Go</a>.</p>
 <h2 id=why-hugo>Why Hugo</h2>
@@ -44,13 +44,13 @@ Coding and more
 <p>Besides, building a blog with Hugo is simple and easy. Here is how:</p>
 <h2 id=step-by-step>Step by step</h2>
 <h3 id=set-up-github-pages>Set up GitHub Pages</h3>
-<p>Head over to <a href=https://github.com/>GitHub</a>, login and create a new public repository named <code>username.github.io</code>. Be sure the <code>username</code> is exactly the same as your GitHub username. For example: my username is <code>HuiGong-dev</code> so my repository should be named as <code>HuiGong-dev.github.io</code>. Check the official guide <a href=(https://pages.github.com/)>here</a> if you met any problem.</p>
+<p>Head over to <a href=https://github.com/>GitHub</a>, login and create a new public repository named <code>username.github.io</code>. Be sure the <code>username</code> is exactly the same as your GitHub username. For example: my username is <code>HuiGong-dev</code> so my repository should be named as <code>HuiGong-dev.github.io</code>. Check the official guide <a href=(https://pages.github.com/)>here</a> if you meet any problem.</p>
 <h3 id=install-hugo>Install Hugo</h3>
 <p>I&rsquo;m using MacOS and the installation is quite simple with <a href=https://brew.sh/>Homebrew</a>:</p>
 <div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-Shell data-lang=Shell>brew install hugo
 </code></pre></div><p>To check your installation:</p>
 <div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-Shell data-lang=Shell>hugo version
-</code></pre></div><p>the hugo version should show up if the installation is successful.</p>
+</code></pre></div><p>The Hugo version should show up if the installation is successful.</p>
 <h3 id=create-your-site>Create your site</h3>
 <div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-Shell data-lang=Shell>hugo new site your-site-name
 </code></pre></div><p>replace <code>your-site-name</code> with the name of your site. You can name it anything you want. The command above will create a folder named <code>your-site-name</code> in your current working directory. For example, if the current working directory is <code>/Users/huigong/projects</code>, your site will be located in <code>/Users/huigong/your-site-name</code>. If you are not sure about your working directory, just type <code>pwd</code> in your terminal:</p>
@@ -61,7 +61,7 @@ Coding and more
 <div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-Shell data-lang=Shell>cd your-site-name
 git init
 git submodule add https://github.com/spf13/hyde.git
-</code></pre></div><p>There&rsquo;re around 300 themes for Hugo. I chose <a href=https://github.com/spf13/hyde>hyde</a> for my blog. You can find a theme that fits you best <a href=https://themes.gohugo.io/>here</a>. If none of them is the perfect theme for you, you may consider create your own theme in the future and contribute to the Hugo community :)</p>
+</code></pre></div><p>There Are around 300 themes for Hugo. I chose <a href=https://github.com/spf13/hyde>hyde</a> for my blog. You can find a theme that fits you best <a href=https://themes.gohugo.io/>here</a>. If none of them is the perfect theme for you, you may consider create your own theme in the future and contribute to the Hugo community :)</p>
 <p>Don&rsquo;t forget to configure the theme in <code>config.toml</code>. Simply add a line <code>theme = "hyde"</code> in the file. Replace <code>hyde</code> to the name of your own theme if you picked another theme.</p>
 <h3 id=build-your-site-and-push-to-github>Build your site and push to GitHub</h3>
 <p>Creating content in Hugo is simple:</p>
@@ -78,50 +78,50 @@ git submodule add https://github.com/spf13/hyde.git
 <div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-Shell data-lang=Shell>hugo -D
 </code></pre></div><p>code of your site will be generated under <code>./public/</code>. Change directory to <code>public/</code>, do <code>git init</code> and set remote to your GitHub pages repository. Push to your GitHub pages repository and your site should be live within seconds.</p>
 <h3 id=create-a-blog-source-repository-in-github>Create a blog source repository in GitHub</h3>
-<p>Okay, now your site is live, what&rsquo;s next? A problem used to bother me a lot was: how can I update my blog on multiple computers? Say, I have wrote something for my blog on my PC at home and now I&rsquo;m on the way with a laptop. How can I continue my work? Well the answer is: create a GitHub repository just for your source code. I said &ldquo;just&rdquo; because the <code>public/</code> directory is within the source code directory and we need to ignore <code>public/</code> and push the rest of them to github. Another benefit is that you can use GitHub Actions to glue your source code and blog together, which means you don&rsquo;t need to build and deploy your site every time you changed anything in your site, GitHub Actions will do all the boring stuff for you. Sounds nice? Here is how:</p>
-<p>Head over to GitHub and create a new repository with name like <code>blog_source</code> or anything that reminds you it&rsquo;s the source of your blog. Set it as remote repository for your source code and add <code>public/</code> to <code>.gitignore</code>.</p>
+<p>Okay, now your site is live, what&rsquo;s next? A problem used to bother me a lot was: how can I update my blog on multiple computers? Say, I have written something for my blog on my PC at home and now I&rsquo;m on the way with a laptop. How can I continue my work? Well the answer is: create a GitHub repository just for your source code. I said &ldquo;just&rdquo; because the <code>public/</code> directory is within the source code directory and we need to ignore <code>public/</code> and push the rest of them to github. Another benefit is that you can use GitHub Actions to glue your source code and blog together, which means you don&rsquo;t need to build and deploy your site every time you change anything in your site, GitHub Actions will do all the boring stuff for you. Sounds nice? Here is how:</p>
+<p>Head over to GitHub and create a new repository with a name like <code>blog_source</code> or anything that reminds you it&rsquo;s the source of your blog. Set it as a remote repository for your source code and add <code>public/</code> to <code>.gitignore</code>.</p>
 <div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-Shell data-lang=Shell>touch .gitignore
 echo <span style=color:#e6db74>&#34;public/&#34;</span> &gt;&gt; .gitignore
 </code></pre></div><p>push it to GitHub and next time you want to edit your blog on another machine you just need to pull it from GitHub and continue the work.</p>
 <h3 id=automate-the-deploy-using-github-actions>Automate the deploy using GitHub Actions</h3>
-<p>This is one of the exciting part building a blog with GitHub Pages. Before building this blog I knew almost nothing about GitHub Actions but after using it, it was amazing! Automating the boring stuff always makes me hyped!</p>
-<p>Fist step is to create a GitHub personal access token. Follow the official documents <a href=https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token>here</a> for more information.</p>
+<p>This is one of the exciting parts of building a blog with GitHub Pages. Before building this blog I knew almost nothing about GitHub Actions but after using it, it was amazing! Automating the boring stuff always makes me hyped!</p>
+<p>The First step is to create a GitHub personal access token. Follow the official documents <a href=https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token>here</a> for more information.</p>
 <p>Next, Head over to your <code>blog_source</code> repository on GitHub and click <em>Settings -> Secrets -> new repository secret</em>. Paste the token you just got, set the name to <code>ACTIONS_DEPLOY_KEY</code> and hit the <em>Add secret</em> button.</p>
 <p>Add the file <code>.github/workflows/pages.yml</code> below to your source code repository. The <code>external_repository</code> points to your blog repository.</p>
 <div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-YAML data-lang=YAML><span style=color:#f92672>name</span>: <span style=color:#ae81ff>hugo publish</span>
-
+ 
 <span style=color:#f92672>on</span>:
-  <span style=color:#f92672>push</span>:
-    <span style=color:#f92672>branches</span>:
-    - <span style=color:#ae81ff>main</span>
-
+ <span style=color:#f92672>push</span>:
+   <span style=color:#f92672>branches</span>:
+   - <span style=color:#ae81ff>main</span>
+ 
 <span style=color:#f92672>jobs</span>:
-  <span style=color:#f92672>build-deploy</span>:
-    <span style=color:#f92672>runs-on</span>: <span style=color:#ae81ff>macos-latest</span>
-    <span style=color:#f92672>steps</span>:
-    - <span style=color:#f92672>name</span>: <span style=color:#ae81ff>Git checkout</span>
-      <span style=color:#f92672>uses</span>: <span style=color:#ae81ff>actions/checkout@v2</span>
-    
-    - <span style=color:#f92672>name</span>: <span style=color:#ae81ff>Update theme</span>
-      <span style=color:#f92672>run</span>: <span style=color:#ae81ff>git submodule update --init --recursive</span>
-
-    - <span style=color:#f92672>name</span>: <span style=color:#ae81ff>Setup Hugo</span>
-      <span style=color:#f92672>uses</span>: <span style=color:#ae81ff>peaceiris/actions-hugo@v2</span>
-      <span style=color:#f92672>with</span>:
-        <span style=color:#f92672>hugo-version</span>: <span style=color:#e6db74>&#39;0.88.1&#39;</span>
-
-    - <span style=color:#f92672>name</span>: <span style=color:#ae81ff>Build</span>
-      <span style=color:#f92672>run</span>: <span style=color:#ae81ff>hugo  --minify</span>
-
-    - <span style=color:#f92672>name</span>: <span style=color:#ae81ff>Deploy</span>
-      <span style=color:#f92672>uses</span>: <span style=color:#ae81ff>peaceiris/actions-gh-pages@v3</span>
-      <span style=color:#f92672>with</span>:
-        <span style=color:#f92672>personal_token</span>: <span style=color:#ae81ff>${{ secrets.ACTIONS_DEPLOY_KEY }}</span>
-        <span style=color:#f92672>external_repository</span>: <span style=color:#ae81ff>your-github-name/your-github-name.github.io</span>
-        <span style=color:#f92672>publish_branch</span>: <span style=color:#ae81ff>main</span>
-        <span style=color:#f92672>publish_dir</span>: <span style=color:#ae81ff>./public</span>
-        <span style=color:#f92672>user_name</span>: <span style=color:#ae81ff>your-name</span>
-        <span style=color:#f92672>user_email</span>: <span style=color:#ae81ff>your-email</span>
+ <span style=color:#f92672>build-deploy</span>:
+   <span style=color:#f92672>runs-on</span>: <span style=color:#ae81ff>macos-latest</span>
+   <span style=color:#f92672>steps</span>:
+   - <span style=color:#f92672>name</span>: <span style=color:#ae81ff>Git checkout</span>
+     <span style=color:#f92672>uses</span>: <span style=color:#ae81ff>actions/checkout@v2</span>
+  
+   - <span style=color:#f92672>name</span>: <span style=color:#ae81ff>Update theme</span>
+     <span style=color:#f92672>run</span>: <span style=color:#ae81ff>git submodule update --init --recursive</span>
+ 
+   - <span style=color:#f92672>name</span>: <span style=color:#ae81ff>Setup Hugo</span>
+     <span style=color:#f92672>uses</span>: <span style=color:#ae81ff>peaceiris/actions-hugo@v2</span>
+     <span style=color:#f92672>with</span>:
+       <span style=color:#f92672>hugo-version</span>: <span style=color:#e6db74>&#39;0.88.1&#39;</span>
+ 
+   - <span style=color:#f92672>name</span>: <span style=color:#ae81ff>Build</span>
+     <span style=color:#f92672>run</span>: <span style=color:#ae81ff>hugo  --minify</span>
+ 
+   - <span style=color:#f92672>name</span>: <span style=color:#ae81ff>Deploy</span>
+     <span style=color:#f92672>uses</span>: <span style=color:#ae81ff>peaceiris/actions-gh-pages@v3</span>
+     <span style=color:#f92672>with</span>:
+       <span style=color:#f92672>personal_token</span>: <span style=color:#ae81ff>${{ secrets.ACTIONS_DEPLOY_KEY }}</span>
+       <span style=color:#f92672>external_repository</span>: <span style=color:#ae81ff>your-github-name/your-github-name.github.io</span>
+       <span style=color:#f92672>publish_branch</span>: <span style=color:#ae81ff>main</span>
+       <span style=color:#f92672>publish_dir</span>: <span style=color:#ae81ff>./public</span>
+       <span style=color:#f92672>user_name</span>: <span style=color:#ae81ff>your-name</span>
+       <span style=color:#f92672>user_email</span>: <span style=color:#ae81ff>your-email</span>
 </code></pre></div><p>And we are done! GitHub Actions will do all the boring &ldquo;build and deploy&rdquo; routine and you can concentrate on content creating and more.</p>
 <p>Happy blogging!</p>
 </div>
