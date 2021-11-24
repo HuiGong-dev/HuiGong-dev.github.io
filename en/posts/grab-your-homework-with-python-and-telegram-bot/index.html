@@ -47,7 +47,23 @@ Coding and more
 <p>To be continue&mldr;</p>
 <h2 id=web-scrapping-with-python>Web scrapping with python</h2>
 <h3 id=study-the-webpage>Study the webpage</h3>
+<p>The homework links are located in this <a href=https://pp.ipd.kit.edu/lehre/WS202122/paradigmen/uebung/>webpage</a>. Right click and choose <code>Inspect</code> to view the HTML code of this site.</p>
+<p>The homework links are located in a <code>table</code> element.</p>
+<p><img src=/static/image/table.png alt=Table></p>
+<p>And then we can see all the links of homework are located in the <code>&lt;a></code> (or <a href=https://developer.mozilla.org/en-US/docs/Web/HTML/Element/a><em>anchor</em></a>) element.</p>
+<p><img src=/static/image/table_details.png alt=Table_details></p>
+<p>All right, time to right some code to get all the homework links.</p>
 <h3 id=write-the-code>Write the code</h3>
+<p>Import libraries:</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-Python data-lang=Python><span style=color:#f92672>import</span> bs4<span style=color:#f92672>,</span> requests<span style=color:#f92672>,</span> os
+<span style=color:#f92672>import</span> urllib.parse <span style=color:#66d9ef>as</span> ul
+</code></pre></div><p><code>bs4</code> for beautiful soup, <code>os</code> to read and write files, <code>requests</code> to get HTML information and <code>urllib.parse</code> to make URL more friendly.</p>
+<p>Get the HTML of this page:</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-Python data-lang=Python><span style=color:#66d9ef>def</span> <span style=color:#a6e22e>get_page</span>(url):
+      page <span style=color:#f92672>=</span> requests<span style=color:#f92672>.</span>get(url)
+      page<span style=color:#f92672>.</span>raise_for_status()
+      <span style=color:#66d9ef>return</span> page<span style=color:#f92672>.</span>text
+</code></pre></div><p>To be continue&mldr;</p>
 <h2 id=store-result-of-last-scrape-as-local-file>Store result of last scrape as local file</h2>
 <h3 id=do-the-comparison>Do the comparison</h3>
 <h2 id=setting-up-telegram-bot>Setting up Telegram Bot</h2>
