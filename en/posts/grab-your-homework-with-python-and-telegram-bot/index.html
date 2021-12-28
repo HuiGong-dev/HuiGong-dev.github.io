@@ -37,6 +37,7 @@ Coding and more
 <h1>Grab Homework With Python and Telegram Bot</h1>
 <time datetime=2021-11-06T19:48:08+0100 class=post-date>Sat, Nov 6, 2021</time>
 <p>So I&rsquo;m taking a programming paradigms course this semester and the homework will be published every Friday on a webpage. It&rsquo;s kinda boring to check this webpage manually every Friday to grab the homework. Meanwhile, I noticed that the webpage is quite simple and easy to be scraped using python. So&mldr;why not? Spending a few hours to write a small piece of code to grab the homework automatically sounds great.</p>
+<p><a href=https://github.com/HuiGong-dev/auto-update-assignment>Source Code</a></p>
 <h2 id=all-these-efforts-just-to-grab-your-homework-why>All these efforts just to grab your homework? Why?</h2>
 <ul>
 <li>It&rsquo;s fun!</li>
@@ -56,25 +57,132 @@ Coding and more
 <p>Import libraries:</p>
 <div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-Python data-lang=Python><span style=color:#f92672>import</span> bs4<span style=color:#f92672>,</span> requests<span style=color:#f92672>,</span> os
 <span style=color:#f92672>import</span> urllib.parse <span style=color:#66d9ef>as</span> ul
-</code></pre></div><p><code>bs4</code> for beautiful soup, <code>os</code> to read and write files, <code>requests</code> to get HTML information and <code>urllib.parse</code> to make URL more friendly.</p>
+</code></pre></div><p><code>bs4</code> for beautiful soup, <code>os</code> to read and write files, <code>requests</code> to get HTML data and <code>urllib.parse</code> to make URL more friendly.</p>
 <p>Get the HTML of this page:</p>
 <div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-Python data-lang=Python><span style=color:#66d9ef>def</span> <span style=color:#a6e22e>get_page</span>(url):
       page <span style=color:#f92672>=</span> requests<span style=color:#f92672>.</span>get(url)
       page<span style=color:#f92672>.</span>raise_for_status()
       <span style=color:#66d9ef>return</span> page<span style=color:#f92672>.</span>text
-</code></pre></div><p>To be continue&mldr;</p>
-<h2 id=store-result-of-last-scrape-as-local-file>Store result of last scrape as local file</h2>
-<h3 id=do-the-comparison>Do the comparison</h3>
+</code></pre></div><p>Get homework table and extract homework links from anchor element:</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-Python data-lang=Python><span style=color:#66d9ef>def</span> <span style=color:#a6e22e>get_table</span>(page):
+      <span style=color:#75715e>#Store content of the page</span>
+      soup  <span style=color:#f92672>=</span> bs4<span style=color:#f92672>.</span>BeautifulSoup(page, <span style=color:#e6db74>&#39;lxml&#39;</span>)
+      <span style=color:#75715e>#get table which contains uebungsmaterial</span>
+      table <span style=color:#f92672>=</span> soup<span style=color:#f92672>.</span>find_all(<span style=color:#e6db74>&#39;table&#39;</span>)[<span style=color:#ae81ff>1</span>]
+      <span style=color:#66d9ef>return</span> table
+
+<span style=color:#75715e>#Get links of howework in the table</span>
+<span style=color:#66d9ef>def</span> <span style=color:#a6e22e>get_uebung_links</span>(table):
+    links <span style=color:#f92672>=</span> []
+    <span style=color:#75715e>#get links from anchor elements in the table</span>
+    <span style=color:#66d9ef>for</span> row <span style=color:#f92672>in</span> table<span style=color:#f92672>.</span>find_all(<span style=color:#e6db74>&#39;tr&#39;</span>)[<span style=color:#ae81ff>1</span>:]:
+        <span style=color:#66d9ef>try</span>:
+            <span style=color:#66d9ef>for</span> anchor <span style=color:#f92672>in</span> row<span style=color:#f92672>.</span>find_all(<span style=color:#e6db74>&#39;td&#39;</span>)[<span style=color:#ae81ff>2</span>]<span style=color:#f92672>.</span>find_all(<span style=color:#e6db74>&#39;a&#39;</span>):
+                links<span style=color:#f92672>.</span>append(anchor[<span style=color:#e6db74>&#39;href&#39;</span>])
+        <span style=color:#66d9ef>except</span> <span style=color:#a6e22e>ValueError</span>:
+            <span style=color:#66d9ef>continue</span> <span style=color:#75715e>#ignore blank/empty row</span>
+    <span style=color:#66d9ef>return</span> links
+
+</code></pre></div><p>Now we get the links of all the homework given but we only need the newly added homework not all the homework. My way to solve this problem is to create a local file to store the result of last scrape and compare with the fresh scrape. If difference found, call telegram bot and send the link.</p>
+<h2 id=store-result-of-last-scrape-as-local-file-and-compare>Store result of last scrape as local file and compare</h2>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-Python data-lang=Python><span style=color:#75715e>#stored html file of lecture page from last scrape</span>
+page_storage <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;page_storage.html&#34;</span>
+
+<span style=color:#66d9ef>def</span> <span style=color:#a6e22e>compare</span>(page_fresh, page_storage):
+    fresh_links <span style=color:#f92672>=</span> get_uebung_links(get_table(page_fresh))
+    <span style=color:#66d9ef>if</span> os<span style=color:#f92672>.</span>path<span style=color:#f92672>.</span>isfile(<span style=color:#e6db74>&#34;./&#34;</span> <span style=color:#f92672>+</span> page_storage):
+        <span style=color:#66d9ef>with</span> open(page_storage, <span style=color:#e6db74>&#34;r&#34;</span>, newline<span style=color:#f92672>=</span><span style=color:#e6db74>&#39;&#39;</span>) <span style=color:#66d9ef>as</span> f:
+            storage <span style=color:#f92672>=</span> f<span style=color:#f92672>.</span>read()
+            storage_links <span style=color:#f92672>=</span> get_uebung_links(get_table(storage))
+            f<span style=color:#f92672>.</span>close()
+        <span style=color:#66d9ef>if</span> storage_links <span style=color:#f92672>!=</span> fresh_links:
+            <span style=color:#66d9ef>with</span> open(page_storage, <span style=color:#e6db74>&#34;w&#34;</span>, newline<span style=color:#f92672>=</span><span style=color:#e6db74>&#39;&#39;</span>) <span style=color:#66d9ef>as</span> f:
+                f<span style=color:#f92672>.</span>write(page_fresh)
+                f<span style=color:#f92672>.</span>close()
+            call_bot(get_difference(fresh_links, storage_links), token, chat_id)
+        <span style=color:#66d9ef>else</span>:
+            print(<span style=color:#e6db74>&#39;You are up to date.&#39;</span>)
+    <span style=color:#66d9ef>else</span>:
+        <span style=color:#66d9ef>with</span> open(page_storage, <span style=color:#e6db74>&#34;w&#34;</span>, newline<span style=color:#f92672>=</span><span style=color:#e6db74>&#39;&#39;</span>) <span style=color:#66d9ef>as</span> f:
+            f<span style=color:#f92672>.</span>write(page_fresh)
+            f<span style=color:#f92672>.</span>close()
+            call_bot(combine_url_with_links(url, fresh_links), token, chat_id)
+</code></pre></div><p>If the local file does not exist, it means this is the first scrape so that we create and save the html data to the local file and send all the links through telegram bot.</p>
+<p>If the local file exists, compare it with the fresh screaped page and when difference is found, send the difference through telegram bot and update the local file. If there&rsquo;s no difference, we&rsquo;re up to date.</p>
+<p>There are some help functions in the code above. I&rsquo;ll go through them in the content below.</p>
 <h2 id=setting-up-telegram-bot>Setting up Telegram Bot</h2>
-<h3 id=create-your-own-bot>Create your own bot</h3>
-<h3 id=get-your-chat-id>Get your chat ID</h3>
-<h3 id=prepare-the-text>Prepare the text</h3>
-<h3 id=call-the-bot>Call the bot</h3>
-<h2 id=scheduling>Scheduling</h2>
-<h2 id=future-improvement>Future improvement</h2>
-<h3 id=scrape-website-with-authentication-system>Scrape website with authentication system</h3>
-<h3 id=downloading-file-automatically>Downloading file automatically</h3>
-<h3 id=dealing-with-vpn-requirement>Dealing with VPN requirement</h3>
+<ol>
+<li>Use <a href=https://t.me/botfather>BotFather</a> to create new bot accounts and manage your existing bots.</li>
+<li>Get bot token from BotFather.</li>
+<li>Get telegram chat id / group id (depends on where you want to use the bot).</li>
+</ol>
+<p>If you want to use the bot with your personal account, add the bot with your personal account and send a dummy message to the bot and check this url (remember to replace <code>&lt;YourBOTToken></code> with your bot token):</p>
+<pre tabindex=0><code class=language-Url data-lang=Url>https://api.telegram.org/bot&lt;YourBOTToken&gt;/getUpdates
+</code></pre><p>Look for the <code>chat</code> object and you should find your chat id there. It&rsquo;s basicly the same if you want to use the bot in a group. The difference is you need to add the bot to the group first and then interact with it and get the group id using the url above.</p>
+<p>You can then send message to your account / group through this bot using this url:</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-Python data-lang=Python><span style=color:#e6db74>&#34;https://api.telegram.org/bot&#34;</span> <span style=color:#f92672>+</span> token <span style=color:#f92672>+</span> <span style=color:#e6db74>&#34;/sendMessage?chat_id=&#34;</span> <span style=color:#f92672>+</span> chat_id <span style=color:#f92672>+</span> <span style=color:#e6db74>&#34;&amp;text=</span><span style=color:#e6db74>{}</span><span style=color:#e6db74>&#34;</span><span style=color:#f92672>.</span>format(parsed_updates)
+</code></pre></div><p><code>token</code> is your bot token given by BotFather. <code>chat_id</code> is your account/group id. <code>parsed_updates</code> is the message you want to send.</p>
+<h3 id=help-functions>Help functions</h3>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-Python data-lang=Python><span style=color:#75715e># Get what has been changed in the table.</span>
+<span style=color:#75715e># Return added item list and deleted item list</span>
+<span style=color:#66d9ef>def</span> <span style=color:#a6e22e>get_difference</span>(fresh_links, storage_links):
+    added <span style=color:#f92672>=</span> []
+    <span style=color:#66d9ef>for</span> item <span style=color:#f92672>in</span> fresh_links:
+          <span style=color:#66d9ef>if</span> item <span style=color:#f92672>not</span> <span style=color:#f92672>in</span> storage_links:
+              added<span style=color:#f92672>.</span>append(url <span style=color:#f92672>+</span> item)
+
+    <span style=color:#66d9ef>return</span> added
+
+<span style=color:#75715e># Prepare result text for telegram bot</span>
+<span style=color:#66d9ef>def</span> <span style=color:#a6e22e>form_resultText</span>(added_list):
+    length <span style=color:#f92672>=</span> len(added_list)
+    <span style=color:#66d9ef>if</span> length <span style=color:#f92672>==</span> <span style=color:#ae81ff>0</span>:
+        <span style=color:#66d9ef>return</span> <span style=color:#e6db74>&#34;No update&#34;</span>
+    <span style=color:#66d9ef>else</span>:
+        updates <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;Added:</span><span style=color:#ae81ff>\n</span><span style=color:#e6db74>&#34;</span>
+        <span style=color:#66d9ef>for</span> item <span style=color:#f92672>in</span> added_list[:(length <span style=color:#f92672>-</span> <span style=color:#ae81ff>1</span>)]:
+            updates <span style=color:#f92672>+=</span> item <span style=color:#f92672>+</span> <span style=color:#e6db74>&#34;</span><span style=color:#ae81ff>\n</span><span style=color:#e6db74>&#34;</span>
+        updates <span style=color:#f92672>+=</span> added_list[length <span style=color:#f92672>-</span> <span style=color:#ae81ff>1</span>]
+        <span style=color:#66d9ef>return</span> updates
+
+<span style=color:#66d9ef>def</span> <span style=color:#a6e22e>make_updates_url_friendly</span>(updates):
+    <span style=color:#66d9ef>return</span> ul<span style=color:#f92672>.</span>quote_plus(updates)
+
+<span style=color:#75715e># Build telegram bot request url</span>
+<span style=color:#66d9ef>def</span> <span style=color:#a6e22e>build_telegram_bot_requestUrl</span>(token, chat_id, parsedUpdates):
+    <span style=color:#66d9ef>return</span> <span style=color:#e6db74>&#34;https://api.telegram.org/bot&#34;</span> <span style=color:#f92672>+</span> token <span style=color:#f92672>+</span> <span style=color:#e6db74>&#34;/sendMessage?chat_id=&#34;</span> <span style=color:#f92672>+</span> chat_id <span style=color:#f92672>+</span> <span style=color:#e6db74>&#34;&amp;text=</span><span style=color:#e6db74>{}</span><span style=color:#e6db74>&#34;</span><span style=color:#f92672>.</span>format(parsed_updates)
+
+<span style=color:#75715e># URL of lecture programming paradigmen</span>
+url <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;https://pp.ipd.kit.edu/lehre/WS202122/paradigmen/uebung/&#34;</span>
+<span style=color:#75715e># Combine base url with homework link (homework links don&#39;t contain main url originally)</span>
+<span style=color:#66d9ef>def</span> <span style=color:#a6e22e>combine_url_with_links</span>(url, link_list):
+    url_links <span style=color:#f92672>=</span> []
+    <span style=color:#66d9ef>for</span> link <span style=color:#f92672>in</span> link_list:
+        url_links<span style=color:#f92672>.</span>append(url <span style=color:#f92672>+</span> link)
+    <span style=color:#66d9ef>return</span> url_links    
+
+</code></pre></div><h3 id=call-the-bot>Call the bot</h3>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-Python data-lang=Python><span style=color:#66d9ef>def</span> <span style=color:#a6e22e>call_bot</span>(added_list, token, chat_id):
+    parsed_updates <span style=color:#f92672>=</span> make_updates_url_friendly(form_result_text(added_list))
+    requests<span style=color:#f92672>.</span>get(build_telegram_bot_request_url(token, chat_id, parsed_updates))
+</code></pre></div><p>Finally, we need to call <code>compare</code> function to start the scrape:</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-Python data-lang=Python>compare(get_page(url),page_storage)
+</code></pre></div><h2 id=scheduling>Scheduling</h2>
+<p>Crontab is a job scheduler on Ubuntu. Since the assignment is always due on Friday, I set the scheduler to run at minute 15 past every hour from 14 through 18 on Friday.</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-Shell data-lang=Shell>$ crontab -e
+</code></pre></div><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-Shell data-lang=Shell><span style=color:#ae81ff>15</span> 14-18 * * <span style=color:#ae81ff>5</span> /path/to/python3 /path/to/updater.py &gt;&gt; /path/to/cron.log 2&gt;&amp;<span style=color:#ae81ff>1</span>
+</code></pre></div><h2 id=future-improvement-todo>Future improvement (todo)</h2>
+<ol>
+<li>
+<p>Scrape website with authentication system</p>
+</li>
+<li>
+<p>Downloading file automatically</p>
+</li>
+<li>
+<p>Dealing with VPN requirement</p>
+</li>
+</ol>
 </div>
 </main>
 <script type=application/javascript>var doNotTrack=!1;doNotTrack||(function(a,e,f,g,b,c,d){a.GoogleAnalyticsObject=b,a[b]=a[b]||function(){(a[b].q=a[b].q||[]).push(arguments)},a[b].l=1*new Date,c=e.createElement(f),d=e.getElementsByTagName(f)[0],c.async=1,c.src=g,d.parentNode.insertBefore(c,d)}(window,document,'script','https://www.google-analytics.com/analytics.js','ga'),ga('create','UA-212132284-1','auto'),ga('send','pageview'))</script>
