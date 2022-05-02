@@ -73,6 +73,28 @@ Coding and more
 <p>JSX feels like a mixture of JavaScript and HTML but some keywords are reserved in JSX such as <code>class</code> so if I want to set class for a HTML element I should use <code>className</code> instead.</p>
 <p>The tutorial I&rsquo;m following is aged and it&rsquo;s still using <code>ReactDOM.render</code>(react 17) which is no longer supported in React 18. I followed the React document and rewrote it with <code>root.render</code>.</p>
 <p>Another problem is I did not see any mention of <code>index.js</code> in the <code>index.html</code> file like it usually does but somehow <code>index.js</code> still has access to the <code>index.html</code> DOM. I did some googling and found out it&rsquo;s using Webpack with <a href=https://www.npmjs.com/package/html-webpack-plugin>html-webpack-plugin</a>.</p>
+<hr>
+<p>Date: 2 May 2022</p>
+<ul>
+<li>
+<p>What I&rsquo;ve learned
+Add css for components, set inline css.</p>
+</li>
+<li>
+<p>Notes
+Again, the <code>index.css</code> is bundled with <code>index.html</code> through webpack just as the case of <code>index.js</code>.</p>
+</li>
+</ul>
+<p>Color tokens in JSX will not show color picker in VS Code by default so I looked up some extensions. The first one I tried is <code>json-color-token</code>. It actually worked but only supported hex color tokens. Sometimes I also use for example <code>ragb</code> so I tried another one called <code>vscode-color-picker</code> and now it worked! After installation remember to add this to your <code>setting.json</code>:</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json><span style=color:#e6db74>&#34;vscode-color-picker.languages&#34;</span><span style=color:#960050;background-color:#1e0010>:</span> [
+   <span style=color:#e6db74>&#34;python&#34;</span>,
+   <span style=color:#e6db74>&#34;typescript&#34;</span>,
+   <span style=color:#e6db74>&#34;json&#34;</span>,
+   <span style=color:#e6db74>&#34;jsonc&#34;</span>,
+   <span style=color:#e6db74>&#34;javascript&#34;</span>,
+   <span style=color:#e6db74>&#34;javascriptreact&#34;</span>
+ ]
+</code></pre></div><p>If the color picker did not show up, try cmd+shift+p and then <code>reload window</code>. After that the color picker should be there.</p>
 </div>
 </main>
 <script type=application/javascript>var doNotTrack=!1;doNotTrack||(function(a,e,f,g,b,c,d){a.GoogleAnalyticsObject=b,a[b]=a[b]||function(){(a[b].q=a[b].q||[]).push(arguments)},a[b].l=1*new Date,c=e.createElement(f),d=e.getElementsByTagName(f)[0],c.async=1,c.src=g,d.parentNode.insertBefore(c,d)}(window,document,'script','https://www.google-analytics.com/analytics.js','ga'),ga('create','UA-212132284-1','auto'),ga('send','pageview'))</script>
