@@ -36,7 +36,7 @@ Coding and more
 <div class=post>
 <h1>How to build personal blog using GitHub Pages and Hugo</h1>
 <time datetime=2021-11-02T11:00:32+0100 class=post-date>Published: Tue, Nov 2, 2021</time>
-<time datetime=2021-11-02T11:00:32+0100 class=post-date>Updated: Wed, Nov 24, 2021</time>
+<time datetime=2021-11-02T11:00:32+0100 class=post-date>Updated: Tue, May 3, 2022</time>
 <p>You want to build a personal blog but don&rsquo;t want to spend too much time building everything from scratch? Me too! After some research I got to know there are several static site generators out there and the most used generators are: <a href=https://jekyllrb.com/>Jekyll</a>, <a href=https://hexo.io/>Hexo</a> and <a href=https://gohugo.io/>Hugo</a>. All of them work perfectly with <a href=https://pages.github.com/>GitHub Pages</a>. I chose Hugo as my site generator, and it worked perfectly.</p>
 <h2 id=what-is-hugo>What is Hugo</h2>
 <p>Hugo is a static site generator written in <a href=https://golang.org/>Go</a>.</p>
@@ -90,41 +90,98 @@ echo <span style=color:#e6db74>&#34;public/&#34;</span> &gt;&gt; .gitignore
 <p>Next, Head over to your <code>blog_source</code> repository on GitHub and click <em>Settings → Secrets → new repository secret</em>. Paste the token you just got, set the name to <code>ACTIONS_DEPLOY_KEY</code> and hit the <em>Add secret</em> button.</p>
 <p>Add the file <code>.github/workflows/pages.yml</code> below to your source code repository. The <code>external_repository</code> points to your blog repository.</p>
 <div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-YAML data-lang=YAML><span style=color:#f92672>name</span>: <span style=color:#ae81ff>hugo publish</span>
- 
+
 <span style=color:#f92672>on</span>:
- <span style=color:#f92672>push</span>:
-   <span style=color:#f92672>branches</span>:
-   - <span style=color:#ae81ff>main</span>
- 
+  <span style=color:#f92672>push</span>:
+    <span style=color:#f92672>branches</span>:
+    - <span style=color:#ae81ff>main</span>
+
 <span style=color:#f92672>jobs</span>:
- <span style=color:#f92672>build-deploy</span>:
-   <span style=color:#f92672>runs-on</span>: <span style=color:#ae81ff>macos-latest</span>
-   <span style=color:#f92672>steps</span>:
-   - <span style=color:#f92672>name</span>: <span style=color:#ae81ff>Git checkout</span>
-     <span style=color:#f92672>uses</span>: <span style=color:#ae81ff>actions/checkout@v2</span>
-  
-   - <span style=color:#f92672>name</span>: <span style=color:#ae81ff>Update theme</span>
-     <span style=color:#f92672>run</span>: <span style=color:#ae81ff>git submodule update --init --recursive</span>
- 
-   - <span style=color:#f92672>name</span>: <span style=color:#ae81ff>Setup Hugo</span>
-     <span style=color:#f92672>uses</span>: <span style=color:#ae81ff>peaceiris/actions-hugo@v2</span>
-     <span style=color:#f92672>with</span>:
-       <span style=color:#f92672>hugo-version</span>: <span style=color:#e6db74>&#39;0.88.1&#39;</span>
- 
-   - <span style=color:#f92672>name</span>: <span style=color:#ae81ff>Build</span>
-     <span style=color:#f92672>run</span>: <span style=color:#ae81ff>hugo  --minify</span>
- 
-   - <span style=color:#f92672>name</span>: <span style=color:#ae81ff>Deploy</span>
-     <span style=color:#f92672>uses</span>: <span style=color:#ae81ff>peaceiris/actions-gh-pages@v3</span>
-     <span style=color:#f92672>with</span>:
-       <span style=color:#f92672>personal_token</span>: <span style=color:#ae81ff>${{ secrets.ACTIONS_DEPLOY_KEY }}</span>
-       <span style=color:#f92672>external_repository</span>: <span style=color:#ae81ff>your-github-name/your-github-name.github.io</span>
-       <span style=color:#f92672>publish_branch</span>: <span style=color:#ae81ff>main</span>
-       <span style=color:#f92672>publish_dir</span>: <span style=color:#ae81ff>./public</span>
-       <span style=color:#f92672>user_name</span>: <span style=color:#ae81ff>your-name</span>
-       <span style=color:#f92672>user_email</span>: <span style=color:#ae81ff>your-email</span>
+  <span style=color:#f92672>build-deploy</span>:
+    <span style=color:#f92672>runs-on</span>: <span style=color:#ae81ff>macos-latest</span>
+    <span style=color:#f92672>steps</span>:
+    - <span style=color:#f92672>name</span>: <span style=color:#ae81ff>Git checkout</span>
+      <span style=color:#f92672>uses</span>: <span style=color:#ae81ff>actions/checkout@v2</span>
+      <span style=color:#f92672>with</span>:
+        <span style=color:#f92672>fetch-depth</span>: <span style=color:#ae81ff>0</span>
+    
+    - <span style=color:#f92672>name</span>: <span style=color:#ae81ff>Update theme</span>
+      <span style=color:#f92672>run</span>: <span style=color:#ae81ff>git submodule update --init --recursive</span>
+
+    - <span style=color:#f92672>name</span>: <span style=color:#ae81ff>Setup Hugo</span>
+      <span style=color:#f92672>uses</span>: <span style=color:#ae81ff>peaceiris/actions-hugo@v2</span>
+      <span style=color:#f92672>with</span>:
+        <span style=color:#f92672>hugo-version</span>: <span style=color:#e6db74>&#39;0.88.1&#39;</span>
+
+    - <span style=color:#f92672>name</span>: <span style=color:#ae81ff>Build</span>
+      <span style=color:#f92672>run</span>: <span style=color:#ae81ff>hugo  --enableGitInfo --minify</span>
+
+    - <span style=color:#f92672>name</span>: <span style=color:#ae81ff>Deploy</span>
+      <span style=color:#f92672>uses</span>: <span style=color:#ae81ff>peaceiris/actions-gh-pages@v3</span>
+      <span style=color:#f92672>with</span>:
+        <span style=color:#f92672>personal_token</span>: <span style=color:#ae81ff>${{ secrets.ACTIONS_DEPLOY_KEY }}</span>
+        <span style=color:#f92672>external_repository</span>: <span style=color:#ae81ff>HuiGong-dev/HuiGong-dev.github.io</span>
+        <span style=color:#f92672>publish_branch</span>: <span style=color:#ae81ff>main</span>
+        <span style=color:#f92672>publish_dir</span>: <span style=color:#ae81ff>./public</span>
+        <span style=color:#f92672>user_name</span>: <span style=color:#ae81ff>HuiGong-dev</span>
+        <span style=color:#f92672>user_email</span>: <span style=color:#ae81ff>hellohuigong@gmail.com</span>
+
 </code></pre></div><p>And we are done! GitHub Actions will do all the boring &ldquo;build and deploy&rdquo; routine while you can concentrate on content creating and more.</p>
 <p>Happy blogging!</p>
+<hr>
+<h3 id=update-for-github-action-and-lastmod>Update for GitHub Action and Lastmod</h3>
+<p>Recently I tried to show <code>Last Update</code> info based on last commit for each post and here is how:</p>
+<ol>
+<li>
+<p>add <code>enableGitInfo = true</code> in your <code>config.toml</code> file.</p>
+</li>
+<li>
+<p>Ceate new directory <code>layouts/_default/</code>(if not exists) directly under hugo directory and create a file called &ldquo;single.html&rdquo;.</p>
+</li>
+</ol>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-Shell data-lang=Shell>cd your-hugo-directory
+mkdir -p layouts/_default
+cd layouts/_default
+touch single.html
+</code></pre></div><ol start=3>
+<li>Add content to <code>single.html</code>. Here is mine for reference:</li>
+</ol>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-HTML data-lang=HTML>{{ define &#34;main&#34; -}}
+&lt;<span style=color:#f92672>div</span> <span style=color:#a6e22e>class</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;post&#34;</span>&gt;
+  &lt;<span style=color:#f92672>h1</span>&gt;{{ .Title }}&lt;/<span style=color:#f92672>h1</span>&gt;
+  
+  &lt;<span style=color:#f92672>time</span> <span style=color:#a6e22e>datetime</span><span style=color:#f92672>=</span><span style=color:#e6db74>{{</span> <span style=color:#960050;background-color:#1e0010>.</span><span style=color:#a6e22e>Date</span><span style=color:#960050;background-color:#1e0010>.</span><span style=color:#a6e22e>Format</span> <span style=color:#960050;background-color:#1e0010>&#34;</span><span style=color:#a6e22e>2006-01-02T15:04:05Z0700</span><span style=color:#960050;background-color:#1e0010>&#34;</span> <span style=color:#960050;background-color:#1e0010>}}</span> <span style=color:#a6e22e>class</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;post-date&#34;</span>&gt;Published: {{ .Date.Format &#34;Mon, Jan 2, 2006&#34; }}&lt;/<span style=color:#f92672>time</span>&gt;
+  {{- if .GitInfo }}
+  &lt;<span style=color:#f92672>time</span> <span style=color:#a6e22e>datetime</span><span style=color:#f92672>=</span><span style=color:#e6db74>{{</span> <span style=color:#960050;background-color:#1e0010>.</span><span style=color:#a6e22e>Date</span><span style=color:#960050;background-color:#1e0010>.</span><span style=color:#a6e22e>Format</span> <span style=color:#960050;background-color:#1e0010>&#34;</span><span style=color:#a6e22e>2006-01-02T15:04:05Z0700</span><span style=color:#960050;background-color:#1e0010>&#34;</span> <span style=color:#960050;background-color:#1e0010>}}</span> <span style=color:#a6e22e>class</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;post-date&#34;</span>&gt;Updated: {{.Page.Lastmod.Format &#34;Mon, Jan 2, 2006&#34; }}&lt;/<span style=color:#f92672>time</span>&gt;
+  {{- end }}
+  {{ .Content }}
+&lt;/<span style=color:#f92672>div</span>&gt;
+
+{{ if .Site.DisqusShortname -}}
+&lt;<span style=color:#f92672>h2</span>&gt;Comments&lt;/<span style=color:#f92672>h2</span>&gt;
+{{ template &#34;_internal/disqus.html&#34; . }}
+{{- end }}
+{{- end }}
+</code></pre></div><p>Your <code>single.html</code> may look different as mine and it&rsquo;s totally fine. The point is to use <code>.Page.Lastmod</code> to get the last update date.</p>
+<ol start=4>
+<li>Add <code>frontmatter</code> to <code>config.toml</code></li>
+</ol>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-TOML data-lang=TOML>[<span style=color:#a6e22e>frontmatter</span>]
+  <span style=color:#a6e22e>date</span> = [<span style=color:#e6db74>&#39;date&#39;</span>, <span style=color:#e6db74>&#39;publishDate&#39;</span>, <span style=color:#e6db74>&#39;lastmod&#39;</span>]
+  <span style=color:#a6e22e>expiryDate</span> = [<span style=color:#e6db74>&#39;expiryDate&#39;</span>]
+  <span style=color:#a6e22e>lastmod</span> = [<span style=color:#e6db74>&#39;:git&#39;</span>, <span style=color:#e6db74>&#39;lastmod&#39;</span>, <span style=color:#e6db74>&#39;date&#39;</span>, <span style=color:#e6db74>&#39;publishDate&#39;</span>]
+  <span style=color:#a6e22e>publishDate</span> = [<span style=color:#e6db74>&#39;publishDate&#39;</span>, <span style=color:#e6db74>&#39;date&#39;</span>]
+</code></pre></div><p>So that Hugo will try to get lastmod info from <code>.GitInfo</code> first.</p>
+<ol start=5>
+<li>Add <code>--enableGitInfo</code> flag in GitHub Action file and set checkout action fetch-depth to 0.</li>
+</ol>
+<p>The Hugo official document said that you can use <code>.GitInfo</code> by either adding <code>enableGitInfo = true</code> in your <code>config.toml</code> file or add <code>--enableGitInfo</code> flag when calling <code>hugo server</code> but that&rsquo;s not accurate. You need both to make it work. Otherwise, the <code>.GitInfo</code> object would be null.</p>
+<p>By default, the <a href=https://github.com/actions/checkout>GitHub checkout action</a> only fetches the commit which triggered the workflow. The result is that all the posts will show the same last update date. Specifying <code>fetch-depth:0</code> will solve this problem (You can ignore this part if you&rsquo;re not using GitHub action).</p>
+<p>The yml file for GitHub Action has been updated above.</p>
+<p>What a ride!</p>
+<h3 id=references>References</h3>
+<p><a href=https://discourse.gohugo.io/t/problems-with-gitinfo-in-ci/22480/2>https://discourse.gohugo.io/t/problems-with-gitinfo-in-ci/22480/2</a></p>
+<p><a href=https://djangocas.dev/blog/add-git-commit-date-as-last-update-date-in-hugo-page/>https://djangocas.dev/blog/add-git-commit-date-as-last-update-date-in-hugo-page/</a></p>
 </div>
 </main>
 <script type=application/javascript>var doNotTrack=!1;doNotTrack||(function(a,e,f,g,b,c,d){a.GoogleAnalyticsObject=b,a[b]=a[b]||function(){(a[b].q=a[b].q||[]).push(arguments)},a[b].l=1*new Date,c=e.createElement(f),d=e.getElementsByTagName(f)[0],c.async=1,c.src=g,d.parentNode.insertBefore(c,d)}(window,document,'script','https://www.google-analytics.com/analytics.js','ga'),ga('create','UA-212132284-1','auto'),ga('send','pageview'))</script>
