@@ -36,7 +36,7 @@ Coding and more
 <div class=post>
 <h1>How to build personal blog using GitHub Pages and Hugo</h1>
 <time datetime=2021-11-02T11:00:32+0100 class=post-date>Published: Tue, Nov 2, 2021</time>
-<time datetime=2021-11-02T11:00:32+0100 class=post-date>Updated: Tue, May 3, 2022</time>
+<time datetime=2021-11-02T11:00:32+0100 class=post-date>Updated: Wed, May 4, 2022</time>
 <p>You want to build a personal blog but don&rsquo;t want to spend too much time building everything from scratch? Me too! After some research I got to know there are several static site generators out there and the most used generators are: <a href=https://jekyllrb.com/>Jekyll</a>, <a href=https://hexo.io/>Hexo</a> and <a href=https://gohugo.io/>Hugo</a>. All of them work perfectly with <a href=https://pages.github.com/>GitHub Pages</a>. I chose Hugo as my site generator, and it worked perfectly.</p>
 <h2 id=what-is-hugo>What is Hugo</h2>
 <p>Hugo is a static site generator written in <a href=https://golang.org/>Go</a>.</p>
@@ -136,7 +136,7 @@ echo <span style=color:#e6db74>&#34;public/&#34;</span> &gt;&gt; .gitignore
 <p>add <code>enableGitInfo = true</code> in your <code>config.toml</code> file.</p>
 </li>
 <li>
-<p>Ceate new directory <code>layouts/_default/</code>(if not exists) directly under hugo directory and create a file called &ldquo;single.html&rdquo;.</p>
+<p>Ceate a new directory <code>layouts/_default/</code>(if not exists) directly under hugo directory and create a file called &ldquo;single.html&rdquo;.</p>
 </li>
 </ol>
 <div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-Shell data-lang=Shell>cd your-hugo-directory
@@ -162,7 +162,7 @@ touch single.html
 {{ template &#34;_internal/disqus.html&#34; . }}
 {{- end }}
 {{- end }}
-</code></pre></div><p>Your <code>single.html</code> may look different as mine and it&rsquo;s totally fine. The point is to use <code>.Page.Lastmod</code> to get the last update date.</p>
+</code></pre></div><p>Your <code>single.html</code> may look different to mine and it&rsquo;s totally fine. The point is to use <code>.Page.Lastmod</code> to get the last update date.</p>
 <ol start=4>
 <li>Add <code>frontmatter</code> to <code>config.toml</code></li>
 </ol>
@@ -173,7 +173,7 @@ touch single.html
   <span style=color:#a6e22e>publishDate</span> = [<span style=color:#e6db74>&#39;publishDate&#39;</span>, <span style=color:#e6db74>&#39;date&#39;</span>]
 </code></pre></div><p>So that Hugo will try to get lastmod info from <code>.GitInfo</code> first.</p>
 <ol start=5>
-<li>Add <code>--enableGitInfo</code> flag in GitHub Action file and set checkout action fetch-depth to 0.</li>
+<li>Add <code>--enableGitInfo</code> flag in the GitHub Action file and set checkout action fetch-depth to 0.</li>
 </ol>
 <p>The Hugo official document said that you can use <code>.GitInfo</code> by either adding <code>enableGitInfo = true</code> in your <code>config.toml</code> file or add <code>--enableGitInfo</code> flag when calling <code>hugo server</code> but that&rsquo;s not accurate. You need both to make it work. Otherwise, the <code>.GitInfo</code> object would be null.</p>
 <p>By default, the <a href=https://github.com/actions/checkout>GitHub checkout action</a> only fetches the commit which triggered the workflow. The result is that all the posts will show the same last update date. Specifying <code>fetch-depth:0</code> will solve this problem (You can ignore this part if you&rsquo;re not using GitHub action).</p>
