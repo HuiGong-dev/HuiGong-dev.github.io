@@ -36,7 +36,7 @@ Coding and more
 <div class=post>
 <h1>RESTful API, Authentication & React study log</h1>
 <time datetime=2022-04-26T15:54:54+0200 class=post-date>Published: Tue, Apr 26, 2022</time>
-<time datetime=2022-04-26T15:54:54+0200 class=post-date>Updated: Thu, May 12, 2022</time>
+<time datetime=2022-04-26T15:54:54+0200 class=post-date>Updated: Wed, May 18, 2022</time>
 <p>The past two months were the so-called &ldquo;Klausurphase '' in Germany and I barely updated anything here in those two months. Now it&rsquo;s time to restart in this new semester.</p>
 <p>Here is my plan:</p>
 <ul>
@@ -128,6 +128,12 @@ Coding and more
 </code></pre></div><p>you need to use:</p>
 <div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-javascript data-lang=javascript><span style=color:#a6e22e>item</span>.<span style=color:#a6e22e>item</span>.<span style=color:#a6e22e>score</span>
 </code></pre></div><p>I understand why it works this way but still it looks a bit weird. Maybe it&rsquo;s because I&rsquo;m new to this. I&rsquo;ll update here if I get better explaination/understanding.</p>
+<hr>
+<p>Okay I know why now. The standard way is to use <code>props</code> for the passed item and whatever you call the item in <code>ElementList.jsx</code>, it&rsquo;s gonna be an object in <code>props</code>.</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-javascript data-lang=javascript><span style=color:#66d9ef>function</span> <span style=color:#a6e22e>Element</span>(<span style=color:#a6e22e>props</span>) {
+    <span style=color:#66d9ef>const</span> [<span style=color:#a6e22e>score</span>, <span style=color:#a6e22e>setScore</span>] <span style=color:#f92672>=</span> <span style=color:#a6e22e>useState</span>(<span style=color:#a6e22e>props</span>.<span style=color:#a6e22e>item</span>.<span style=color:#a6e22e>score</span>);
+    <span style=color:#66d9ef>const</span> [<span style=color:#a6e22e>comment</span>, <span style=color:#a6e22e>setComment</span>] <span style=color:#f92672>=</span> <span style=color:#a6e22e>useState</span>(<span style=color:#a6e22e>props</span>.<span style=color:#a6e22e>item</span>.<span style=color:#a6e22e>comment</span>);
+</code></pre></div>
 </div>
 </main>
 <script type=application/javascript>var doNotTrack=!1;doNotTrack||(function(a,e,f,g,b,c,d){a.GoogleAnalyticsObject=b,a[b]=a[b]||function(){(a[b].q=a[b].q||[]).push(arguments)},a[b].l=1*new Date,c=e.createElement(f),d=e.getElementsByTagName(f)[0],c.async=1,c.src=g,d.parentNode.insertBefore(c,d)}(window,document,'script','https://www.google-analytics.com/analytics.js','ga'),ga('create','UA-212132284-1','auto'),ga('send','pageview'))</script>
